@@ -18,6 +18,7 @@ def listen_forever():
     # x is used for Testing Purpose
     # x = 0
     data_write = ""
+    acks_seen = set()
 
     while True:
 
@@ -31,7 +32,9 @@ def listen_forever():
             data_upload = msg_dict["data"]
             ack, counter = msg_dict["ack"].split(":")
 
-            data_write += data_upload
+            if ack not in acks_seen:
+                data_write += data_upload
+                acks_seen.add(ack)
 
             response = {"data": MESSAGE, "ack": ack + ":" + str(int(counter) + 1)} # reply back to the client
 

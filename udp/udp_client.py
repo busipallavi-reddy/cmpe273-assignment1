@@ -1,12 +1,17 @@
 import socket
 import uuid
 import json
+from itertools import islice
 
 UDP_IP = '127.0.0.1'
 UDP_PORT = 4000
 BUFFER_SIZE = 1024
 MESSAGE = "ping"
 RETRY_COUNT = 5
+PACKET_SIZE = 10
+
+def read_next_n_lines(file_opened, N):
+    return "".join([x for x in islice(file_opened, N)])
 
 def send_packet(s, packet, seq, counter):
 
@@ -42,7 +47,7 @@ def send():
         s.setblocking(True) # Optional. By default, UDP socket is running on blocking mode.
 
         f = open("upload.txt")
-        packet = f.readline()
+        packet = read_next_n_lines(f, PACKET_SIZE)
 
         while packet:
             counter = 0
@@ -62,7 +67,7 @@ def send():
                 print("File upload failed. Client Exiting!")
                 exit()
 
-            packet = f.readline()
+            packet = read_next_n_lines(f, PACKET_SIZE)
 
     except socket.error:
         print("Error! {}".format(socket.error))
