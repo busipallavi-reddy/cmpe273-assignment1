@@ -36,7 +36,7 @@ def send_packet(s, packet, seq, counter):
     except socket.timeout:
         print("This msg was not received by server: ", msg_dict["data"])
 
-    return False, -1, -1
+    return False, -1
 
 def send():
 
