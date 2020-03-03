@@ -10,7 +10,7 @@ MESSAGE = "ping"
 RETRY_COUNT = 5
 PACKET_SIZE = 10
 
-def read_next_n_lines(file_opened, N):
+def read_next_packet(file_opened, N):
     return "".join([x for x in islice(file_opened, N)])
 
 def send_packet(s, packet, seq, counter):
@@ -47,7 +47,7 @@ def send():
         s.setblocking(True) # Optional. By default, UDP socket is running on blocking mode.
 
         f = open("upload.txt")
-        packet = read_next_n_lines(f, PACKET_SIZE)
+        packet = read_next_packet(f, PACKET_SIZE)
 
         while packet:
             counter = 0
@@ -67,7 +67,7 @@ def send():
                 print("File upload failed. Client Exiting!")
                 exit()
 
-            packet = read_next_n_lines(f, PACKET_SIZE)
+            packet = read_next_packet(f, PACKET_SIZE)
 
     except socket.error:
         print("Error! {}".format(socket.error))
